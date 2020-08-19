@@ -1,0 +1,49 @@
+#默认使用配置
+spring:
+  profiles:
+    active: dev
+
+server:
+  #端口号
+  port: 8083
+
+#公共配置与profiles选择无关
+mybatis:
+  typeAliasesPackage: com.zwy.accounting.entity #对应实体类路径
+  mapperLocations: classpath:mapper/*.xml
+
+jenkins:
+  url: http://localhost:8082/
+  user: user
+  pwd: pwd
+  folders:
+    module: AndroidModuleFolder
+    project: AndroidProjectFolder
+
+logging:
+  path: output
+  file: aries.log
+  config: classpath:logback-boot.xml
+---
+
+#开发配置
+spring:
+  profiles: dev
+
+  datasource:
+    # serverTimezone设置时区，+8要换成%2B8，url才能解析出来
+    url: jdbc:mysql://localhost:3306/db_accounting?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: a410013112
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialSize: 1  #初始化大小
+    minIdle: 1  #空闲连接池的大小
+    maxActive: 50 #最大激活数量
+
+
+#pagehelper
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql

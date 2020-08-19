@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwy.accounting.dao.UserEntityMapper">
+    <resultMap id="BaseResultMap" type="com.zwy.accounting.entity.UserEntity">
+        <result column="user_id" property="id" jdbcType="INTEGER"/>
+        <result column="phone_num" property="phoneNum" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="TABLE">
+        tb_user
+    </sql>
+    <sql id="COLUMN">
+        phone_num
+    </sql>
+
+    <insert id="insert" parameterType="com.zwy.accounting.entity.UserEntity">
+        insert into tb_user (phone_num)
+        values (#{phoneNum,jdbcType=VARCHAR})
+    </insert>
+    <select id="selectUsers" resultMap="BaseResultMap">
+        SELECT
+        <include refid="COLUMN"/>
+        FROM
+        <include refid="TABLE"/>
+    </select>
+
+</mapper>
