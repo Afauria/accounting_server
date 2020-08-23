@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zwy.accounting.dao.AccountEntityMapper">
+  <resultMap id="BaseResultMap" type="com.zwy.accounting.entity.AccountEntity">
+    <id column="account_id" jdbcType="CHAR" property="accountId" />
+    <result column="account_type" jdbcType="INTEGER" property="accountType" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="amount" jdbcType="DOUBLE" property="amount" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="creator" jdbcType="CHAR" property="creator" />
+  </resultMap>
+
+  <sql id="TABLE">
+        tb_account
+  </sql>
+
+  <sql id="COLUMN">
+    account_id, account_type, `name`, amount, description, creator, gmt_create, gmt_update,
+    dr
+  </sql>
+
+  <!-- 新增账户 -->
+  <insert id="insert" parameterType="com.zwy.accounting.entity.AccountEntity">
+    insert into tb_account (account_id, account_type, `name`,
+      amount, description, creator
+      )
+    values (#{accountId,jdbcType=CHAR}, #{accountType,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+      #{amount,jdbcType=DOUBLE}, #{description,jdbcType=VARCHAR}, #{creator,jdbcType=CHAR}
+      )
+  </insert>
+
+  <!-- 查询用户的全部账户 -->
+  <select id="selectAllByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="COLUMN" />
+    from
+    <include refid="TABLE" />
+    where creator = #{userid,jdbcType=CHAR} and dr = 0
+  </select>
+
+  <!-- 删除用户的某个账户 删除时更新dr=1 不进行物理删除 -->
+  <update id="deleteByAccountId" parameterType="java.lang.String">
+    update
+    <include refid="TABLE"></include>
+    set dr = 1
+    where account_id = #{accountId,jdbcType=CHAR}
+  </update>
+
+  <update id="updateByAccountId" parameterType="com.zwy.accounting.entity.AccountEntity">
+     update
+    <include refid="TABLE"></include>
+    <set>
+      <if test="accountType != null">
+        account_type = #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where account_id = #{accountId,jdbcType=CHAR}
+  </update>
+
+</mapper>

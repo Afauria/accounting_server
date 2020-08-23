@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zwy.accounting.dao.CategoryEntityMapper">
+  <resultMap id="BaseResultMap" type="com.zwy.accounting.entity.CategoryEntity">
+    <id column="category_id" jdbcType="CHAR" property="categoryId" />
+    <result column="category_type" jdbcType="INTEGER" property="categoryType" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="order1" jdbcType="INTEGER" property="order1" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="creator" jdbcType="CHAR" property="creator" />
+  </resultMap>
+
+  <sql id="TABLE">
+    tb_category
+  </sql>
+
+  <sql id="COLUMN">
+    category_id, category_type, `name`, order1, description, creator, gmt_create, gmt_update, 
+    dr
+  </sql>
+  <select id="selectAllByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="COLUMN" />
+    from
+    <include refid="TABLE" />
+    where creator = #{userid,jdbcType=CHAR} and dr = 0
+  </select>
+
+  <delete id="deleteByCategoryId" parameterType="java.lang.String">
+    update
+    <include refid="TABLE"></include>
+    set dr = 1
+    where category_id = #{categoryId,jdbcType=CHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.zwy.accounting.entity.CategoryEntity">
+    insert into tb_category (category_id, category_type, `name`, 
+      order1, description, creator
+      )
+    values (#{categoryId,jdbcType=CHAR}, #{categoryType,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{order1,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{creator,jdbcType=CHAR}
+      )
+  </insert>
+
+  <update id="updateByCategoryId" parameterType="com.zwy.accounting.entity.CategoryEntity">
+    update
+    <include refid="TABLE"></include>
+    <set>
+      <if test="categoryType != null">
+        category_type = #{categoryType,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="order1 != null">
+        order1 = #{order1,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+
+    </set>
+    where category_id = #{categoryId,jdbcType=CHAR}
+  </update>
+
+</mapper>
