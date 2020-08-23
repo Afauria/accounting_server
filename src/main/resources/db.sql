@@ -10,6 +10,68 @@ create table if not exists tb_user(
 	gmt_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )DEFAULT CHARSET=utf8;
 
+##账户表
+CREATE TABLE IF NOT EXISTS tb_account (
+	account_id CHAR ( 32 ) PRIMARY KEY,
+	account_type INT ( 1 ) NOT NULL,
+	name VARCHAR ( 60 ) NOT NULL,
+	amount DOUBLE ( 28, 2 ) NOT NULL DEFAULT 0.00,
+	description VARCHAR ( 200 ),
+	creator CHAR ( 32 ) NOT NULL,
+	gmt_create TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	gmt_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	dr INT ( 1 ) NOT NULL DEFAULT 0
+);
+
+##消费分类表
+CREATE TABLE IF NOT EXISTS tb_category (
+	category_id CHAR ( 32 ) PRIMARY KEY,
+	category_type INT ( 1 ) NOT NULL,
+	name  VARCHAR ( 60 ) NOT NULL,
+	order1 INT ( 4 ) NOT NULL,
+	description VARCHAR ( 200 ),
+	creator CHAR ( 32 ) not null,
+	gmt_create TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	gmt_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	dr INT ( 1 ) NOT NULL DEFAULT 0
+);
+
+##账单
+CREATE TABLE IF NOT EXISTS tb_bill (
+	bill_id CHAR ( 32 ) PRIMARY KEY,
+	amount DOUBLE ( 28, 2 ) NOT NULL,
+	account_id CHAR ( 32 ) NOT NULL,
+	category_id CHAR ( 32 ) NOT NULL,
+	description VARCHAR ( 200 ),
+	creator CHAR ( 32 ) NOT NULL,
+	gmt_create TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	gmt_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	dr INT ( 1 ) NOT NULL DEFAULT 0
+);
+
+##预算表
+CREATE TABLE IF NOT EXISTS tb_budget (
+	budget_id CHAR ( 32 ) PRIMARY KEY,
+	amount DOUBLE ( 28, 2 ) NOT NULL,
+	month CHAR ( 7 ) NOT NULL,
+	description VARCHAR ( 200 ),
+	creator CHAR ( 32 ) NOT NULL,
+	gmt_create TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	gmt_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	dr INT ( 1 ) NOT NULL DEFAULT 0
+);
+
+##用户表
+CREATE TABLE IF NOT EXISTS tb_user (
+	user_id CHAR ( 32 ) PRIMARY KEY,
+	password VARCHAR ( 200 ) NOT NULL,
+	phonenum CHAR ( 11 ),
+	gmt_create TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	gmt_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	dr INT ( 1 ) NOT NULL DEFAULT 0
+);
+
+
 insert into tb_user(phone_num) values(18100176473);
 
 create table if not exists t_project(
