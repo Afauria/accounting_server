@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zwy.accounting.dao.BillEntityMapper">
+    <resultMap id="BaseResultMap" type="com.zwy.accounting.entity.BillEntity">
+        <id column="bill_id" jdbcType="CHAR" property="billId"/>
+        <result column="amount" jdbcType="DOUBLE" property="amount"/>
+        <result column="account_id" jdbcType="CHAR" property="accountId"/>
+        <result column="category_id" jdbcType="CHAR" property="categoryId"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="creator" jdbcType="CHAR" property="creator"/>
+    </resultMap>
+
+    <resultMap id="BillMap" type="com.zwy.accounting.entity.BillEntity">
+        <id column="bill_id" jdbcType="CHAR" property="billId"/>
+        <result column="amount" jdbcType="DOUBLE" property="amount"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="creator" jdbcType="CHAR" property="creator"/>
+
+        <association property="account" javaType="com.zwy.accounting.entity.AccountEntity">
+            <id column="account_id" jdbcType="CHAR" property="accountId"/>
+            <result column="account_type" jdbcType="INTEGER" property="accountType"/>
+            <result column="account_name" jdbcType="VARCHAR" property="name"/>
+        </association>
+
+        <association property="category" javaType="com.zwy.accounting.entity.CategoryEntity">
+            <id column="category_id" jdbcType="CHAR" property="categoryId"/>
+            <result column="category_type" jdbcType="INTEGER" property="categoryType"/>
+            <result column="category_name" jdbcType="VARCHAR" property="name"/>
+        </association>
+    </resultMap>
+
+    <sql id="TABLE">
+    tb_bill
+  </sql>
+
+    <sql id="COLUMN">
+    bill_id, amount, account_id, category_id, description, creator
+  </sql>
+
+
+    <sql id="BILLCOLUMN">
+   tb_bill.bill_id,
+	tb_bill.amount,
+	tb_bill.description,
+	tb_bill.creator ,
+	tb_account.account_id,
+	tb_account.account_type,
+	tb_account.name account_name,
+	tb_category.category_id,
+	tb_category.category_type,
+	tb_category.name category_name
+  </sql>
+
+    <insert id="insert">
+        insert into
+        <include refid="TABLE"></include>
+        (bill_id, amount, account_id,
+        category_id, description, creator
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.billId}, #{item.amount}, #{item.accountId},#{item.categoryId}, #{item.description}, #{item.creator})
+        </foreach>
+    </insert>
+
+
+    <select id="selectByCondition" resultMap="BillMap">
+        select
+        <include refid="BILLCOLUMN"></include>
+        FROM
+        tb_bill
+        INNER JOIN tb_account ON tb_bill.account_id = tb_account.account_id
+        INNER JOIN tb_category ON tb_bill.category_id = tb_category.category_id
+        WHERE 1=1
+        AND tb_bill.creator = #{creator}
+        <if test="accountId != null and accountId != ''">
+            AND tb_bill.account_id = #{accountId}
+        </if>
+
+        <if test="accountType != null and accountType != ''">
+            AND tb_account.account_type = #{accountType}
+        </if>
+
+        <if test="accountName != null and accountName != ''">
+            AND tb_account.name = #{accountName}
+        </if>
+
+        <if test="categoryId != null and categoryId != ''">
+            AND tb_bill.category_id = #{categoryId}
+        </if>
+
+        <if test="categoryType != null">
+            AND tb_category.category_type = #{categoryType}
+        </if>
+
+        <if test="categoryName != null">
+            AND tb_category.name = #{categoryName}
+        </if>
+
+        AND tb_bill.dr = 0
+    </select>
+
+
+    <!--  <select id="selectByCondition"  resultMap="BillMap">-->
+    <!--    select-->
+    <!--    <include refid="BILLCOLUMN"></include>-->
+    <!--    FROM-->
+    <!--    tb_bill-->
+    <!--    INNER JOIN tb_account ON tb_bill.account_id = tb_account.account_id-->
+    <!--    INNER JOIN tb_category ON tb_bill.category_id = tb_category.category_id-->
+    <!--    WHERE 1=1-->
+    <!--    AND tb_bill.creator =  #{creator}-->
+    <!--    <if test="accountId != null and accountId != ''" >-->
+    <!--      AND tb_bill.account_id = #{accountId}-->
+    <!--    </if>-->
+
+    <!--    <if test="categoryId != null and categoryId != ''" >-->
+    <!--      AND tb_bill.category_id = #{categoryId}-->
+    <!--    </if>-->
+
+    <!--    <if test="categoryType != null" >-->
+    <!--      AND tb_category.category_type = #{categoryType}-->
+    <!--    </if>-->
+
+    <!--    AND tb_bill.dr = 0-->
+    <!--  </select>-->
+
+
+    <delete id="deleteByBillId" parameterType="java.lang.String">
+        update
+        <include refid="TABLE"></include>
+        set dr = 1
+        where bill_id = #{billId,jdbcType=CHAR}
+    </delete>
+
+</mapper>
