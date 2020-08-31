@@ -1,17 +1,17 @@
 package com.zwy.accounting.service;
 
-import com.zwy.accounting.entity.AccountEntity;
+import com.zwy.accounting.common.model.Result;
 import com.zwy.accounting.entity.CategoryEntity;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    String addCategory(CategoryEntity categoryEntity);
+    Result addCategory(String userid, List<CategoryEntity> categoryEntities);
 
-    int deleteByCategoryId(String categoryId);
+    Result queryCategoryByCondition(CategoryEntity categoryEntity);
 
-    List<CategoryEntity> queryAllByUserId(String userId);
+    Result updateByCategoryId(CategoryEntity categoryEntity);
 
-    int updateByCategoryId(CategoryEntity categoryEntity);
+    Result deleteByCategoryId(String userid, String categoryId);
 }

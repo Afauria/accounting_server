@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface CategoryEntityMapper {
 
-    int insert(CategoryEntity categoryEntity);
+    int insert(List<CategoryEntity> categoryEntities);
 
-    int deleteByCategoryId(String categoryId);
-
-    List<CategoryEntity> selectAllByUserId(String userId);
+    List<CategoryEntity> selectByCondition(CategoryEntity categoryEntity);
 
     int updateByCategoryId(CategoryEntity categoryEntity);
+
+    int deleteByCategoryId(String categoryId);
 
 }

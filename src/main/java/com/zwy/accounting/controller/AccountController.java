@@ -1,9 +1,12 @@
 package com.zwy.accounting.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.zwy.accounting.entity.AccountEntity;
 import com.zwy.accounting.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/account")
@@ -13,24 +16,26 @@ public class AccountController {
     private AccountService accountService;
 
     @PostMapping("/add")
-    public String addUser(@RequestBody AccountEntity accountEntity) {
-            return accountService.addAccount(accountEntity);
+    public Object addAccount(@RequestHeader(value = "userid", required = true) String userid, @RequestBody String jsonString) {
+        List<AccountEntity> accountEntities = JSONArray.parseArray(jsonString, AccountEntity.class);
+        return accountService.addAccount(userid, accountEntities);
     }
 
-    @GetMapping("/all")
-    public Object queryAllAccountByUserId(@RequestParam("userid") String userid) {
-        return accountService.queryAllAccountByUserId(userid);
+    @PostMapping("/query")
+    public Object queryAccountByCondition(@RequestHeader(value = "userid", required = true) String userid, @RequestBody AccountEntity accountEntity) {
+        accountEntity.setCreator(userid);
+        return accountService.queryAccountByCondition(accountEntity);
     }
 
     @PostMapping("/update")
-    public Object updateAmountByAccountId(@RequestBody AccountEntity accountEntity) {
+    public Object updateAmountByAccountId(@RequestHeader(value = "userid", required = true) String userid, @RequestBody AccountEntity accountEntity) {
         return accountService.updateByAccountId(accountEntity);
     }
 
 
     @PostMapping("/delete")
-    public int deleteByAccountId(@RequestParam("accountid") String accountid) {
-        return accountService.deleteByAccountId(accountid);
+    public Object deleteByAccountId(@RequestHeader(value = "userid", required = true) String userid,  @RequestBody AccountEntity accountEntity) {
+        return accountService.deleteByAccountId(userid, accountEntity.getAccountId());
     }
 }
 

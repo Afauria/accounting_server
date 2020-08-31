@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface AccountEntityMapper {
 
-    int insert(AccountEntity record);
+    int insert(List<AccountEntity> record);
 
-    List<AccountEntity> selectAllByUserId(String userid);
+    List<AccountEntity> selectByCondition(AccountEntity accountEntity);
 
     int deleteByAccountId(String accountId);
 

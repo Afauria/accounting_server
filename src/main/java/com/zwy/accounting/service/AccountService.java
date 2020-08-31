@@ -1,16 +1,19 @@
 package com.zwy.accounting.service;
 
+import com.zwy.accounting.common.model.Result;
 import com.zwy.accounting.entity.AccountEntity;
 
 import java.util.List;
 
 public interface AccountService {
 
-    String addAccount(AccountEntity accountEntity);
+    Result addAccount(String userid, List<AccountEntity> accountEntity);
 
-    List<AccountEntity> queryAllAccountByUserId(String userid);
+    Result queryAccountByCondition(AccountEntity accountEntity);
 
-    int deleteByAccountId(String accountId);
+    Result updateByAccountId(AccountEntity accountEntity);
 
-    int updateByAccountId(AccountEntity accountEntity);
+    Result deleteByAccountId(String userid, String accountId);
+
+
 }

@@ -18,29 +18,35 @@
     category_id, category_type, `name`, order1, description, creator, gmt_create, gmt_update, 
     dr
   </sql>
-  <select id="selectAllByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+
+  <insert id="insert" parameterType="com.zwy.accounting.entity.CategoryEntity">
+    insert into tb_category (category_id, category_type, `name`, order1, description, creator)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.categoryId}, #{item.categoryType}, #{item.name}, #{item.order1}, #{item.description}, #{item.creator})
+    </foreach>
+  </insert>
+
+  <select id="selectByCondition" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="COLUMN" />
     from
     <include refid="TABLE" />
-    where creator = #{userid,jdbcType=CHAR} and dr = 0
+    where 1=1
+    and creator = #{creator}
+    and dr = 0
+    <if test="categoryId != null and categoryId != ''">
+      AND category_id = #{categoryId}
+    </if>
+
+    <if test="categoryType != null">
+      AND category_type = #{categoryType}
+    </if>
+
+    <if test="name != null">
+      AND name = #{name}
+    </if>
   </select>
-
-  <delete id="deleteByCategoryId" parameterType="java.lang.String">
-    update
-    <include refid="TABLE"></include>
-    set dr = 1
-    where category_id = #{categoryId,jdbcType=CHAR}
-  </delete>
-
-  <insert id="insert" parameterType="com.zwy.accounting.entity.CategoryEntity">
-    insert into tb_category (category_id, category_type, `name`, 
-      order1, description, creator
-      )
-    values (#{categoryId,jdbcType=CHAR}, #{categoryType,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{order1,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{creator,jdbcType=CHAR}
-      )
-  </insert>
 
   <update id="updateByCategoryId" parameterType="com.zwy.accounting.entity.CategoryEntity">
     update
@@ -62,5 +68,16 @@
     </set>
     where category_id = #{categoryId,jdbcType=CHAR}
   </update>
+
+  <delete id="deleteByCategoryId" parameterType="java.lang.String">
+    update
+    <include refid="TABLE"></include>
+    set dr = 1
+    where category_id = #{categoryId,jdbcType=CHAR}
+  </delete>
+
+
+
+
 
 </mapper>

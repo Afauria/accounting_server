@@ -20,22 +20,36 @@
   </sql>
 
   <!-- 新增账户 -->
-  <insert id="insert" parameterType="com.zwy.accounting.entity.AccountEntity">
-    insert into tb_account (account_id, account_type, `name`,
-      amount, description, creator
-      )
-    values (#{accountId,jdbcType=CHAR}, #{accountType,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
-      #{amount,jdbcType=DOUBLE}, #{description,jdbcType=VARCHAR}, #{creator,jdbcType=CHAR}
-      )
+  <insert id="insert" >
+    insert into tb_account (account_id, account_type, `name`, amount, description, creator)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.accountId}, #{item.accountType}, #{item.name},#{item.amount}, #{item.description}, #{item.creator})
+    </foreach>
   </insert>
 
-  <!-- 查询用户的全部账户 -->
-  <select id="selectAllByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <!-- 查询账户 -->
+  <select id="selectByCondition"  resultMap="BaseResultMap">
     select 
     <include refid="COLUMN" />
     from
     <include refid="TABLE" />
-    where creator = #{userid,jdbcType=CHAR} and dr = 0
+    where 1=1
+    and creator = #{creator}
+    and dr = 0
+
+    <if test="accountId != null and accountId != ''" >
+      AND account_id = #{accountId}
+    </if>
+
+    <if test="accountType != null and accountType != ''" >
+      AND account_type = #{accountType}
+    </if>
+
+    <if test="name != null and name != ''" >
+      AND name = #{name}
+    </if>
+
   </select>
 
   <!-- 删除用户的某个账户 删除时更新dr=1 不进行物理删除 -->

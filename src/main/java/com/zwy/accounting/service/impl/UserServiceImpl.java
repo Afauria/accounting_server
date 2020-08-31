@@ -1,7 +1,5 @@
 package com.zwy.accounting.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.zwy.accounting.dao.UserEntityMapper;
 import com.zwy.accounting.entity.UserEntity;
 import com.zwy.accounting.service.UserService;
@@ -10,9 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Created by Afauria on 2019/1/22.
- */
 //修饰service组件,加上之后可以使用@AutoWired自动导入,value值唯一,否则会报错
 //@Service和@Controller与@Component等效,只不过用名称区分控制层和业务层
 @Service(value = "userService")
