@@ -53,11 +53,11 @@
   </select>
 
   <!-- 删除用户的某个账户 删除时更新dr=1 不进行物理删除 -->
-  <update id="deleteByAccountId" parameterType="java.lang.String">
+  <update id="deleteByAccountId" >
     update
     <include refid="TABLE"></include>
     set dr = 1
-    where account_id = #{accountId,jdbcType=CHAR}
+    where account_id = #{accountId} and creator = #{creator} and dr = 0
   </update>
 
   <update id="updateByAccountId" parameterType="com.zwy.accounting.entity.AccountEntity">
@@ -80,4 +80,7 @@
     where account_id = #{accountId,jdbcType=CHAR}
   </update>
 
+  <select id="isExist" parameterType="java.lang.String" resultType="java.lang.String">
+    select name from <include refid="TABLE" /> where name = #{name} and dr = 0 limit 1
+  </select>
 </mapper>

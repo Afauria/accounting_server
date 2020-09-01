@@ -126,11 +126,11 @@
     <!--  </select>-->
 
 
-    <delete id="deleteByBillId" parameterType="java.lang.String">
+    <delete id="deleteByBillId" >
         update
         <include refid="TABLE"></include>
         set dr = 1
-        where bill_id = #{billId,jdbcType=CHAR}
+        where bill_id = #{billId,jdbcType=CHAR} and creator = #{creator} and dr = 0
     </delete>
 
 </mapper>

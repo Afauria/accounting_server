@@ -1,5 +1,6 @@
 package com.zwy.accounting.controller;
 
+import com.zwy.accounting.common.model.Result;
 import com.zwy.accounting.entity.UserEntity;
 import com.zwy.accounting.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/add")
-    public int addUser(UserEntity user) {
+    public Object addUser(@RequestBody UserEntity user) {
         return userService.addUser(user);
     }
 
@@ -32,5 +33,11 @@ public class UserController {
     public Object findAllUser() {
         return userService.findAllUser();
     }
+
+    @PostMapping("/query")
+    public Object queryUser(@RequestBody UserEntity user) {
+        return userService.queryUser(user);
+    }
+
 }
 

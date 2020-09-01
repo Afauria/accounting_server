@@ -1,6 +1,7 @@
 package com.zwy.accounting.dao;
 
 import com.zwy.accounting.entity.CategoryEntity;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ public interface CategoryEntityMapper {
 
     int updateByCategoryId(CategoryEntity categoryEntity);
 
-    int deleteByCategoryId(String categoryId);
+    int deleteByCategoryId(@Param("creator") String creator, @Param("categoryId") String categoryId);
+
+    String isExist(String name);
 
 }

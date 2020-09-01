@@ -8,6 +8,7 @@ import com.zwy.accounting.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,9 +25,13 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Result addAccount(String userid, List<AccountEntity> accountEntities) {
         for (AccountEntity entity : accountEntities) {
+            if(! StringUtils.isEmpty(accountMapper.isExist(entity.getName()))){
+                return ResultUtil.error(10006, "新增失败，已存在:" + entity.getName());
+            }
             String id = UUID.randomUUID().toString().replace("-", "");
             entity.setAccountId(id);
             entity.setCreator(userid);
+
         }
         int res = accountMapper.insert(accountEntities);
         if(res > 0) {
@@ -43,9 +48,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Result deleteByAccountId(String userid, String accountId) {
-        // TO DO
-        // 校验一下accountid是不是属于该用户
-        int res = accountMapper.deleteByAccountId(accountId);
+        int res = accountMapper.deleteByAccountId(userid, accountId);
         if(res > 0){
             return ResultUtil.success(null);
         }

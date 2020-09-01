@@ -12,6 +12,6 @@ public interface BillService {
 
     Result queryBillByCondition(BillQueryEntity billQueryEntity);
 
-    Result deleteByBillId(String billId);
+    Result deleteByBillId(String userid, String billId);
 
 }

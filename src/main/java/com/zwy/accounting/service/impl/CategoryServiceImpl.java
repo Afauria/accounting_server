@@ -8,6 +8,7 @@ import com.zwy.accounting.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +24,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Result addCategory(String userid, List<CategoryEntity> categoryEntities) {
         for (CategoryEntity entity : categoryEntities) {
+            if(! StringUtils.isEmpty(categoryMapper.isExist(entity.getName()))){
+                return ResultUtil.error(10006, "新增失败，已存在:" + entity.getName());
+            }
             String id = UUID.randomUUID().toString().replace("-", "");
             entity.setCategoryId(id);
             entity.setCreator(userid);
@@ -42,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Result deleteByCategoryId(String userid, String categoryId) {
-        int res = categoryMapper.deleteByCategoryId(categoryId);
+        int res = categoryMapper.deleteByCategoryId(userid, categoryId);
         if(res > 0){
             return ResultUtil.success(null);
         }

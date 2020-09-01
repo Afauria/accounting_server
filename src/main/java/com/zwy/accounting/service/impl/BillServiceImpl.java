@@ -43,8 +43,8 @@ public class BillServiceImpl implements BillService {
 
 
     @Override
-    public Result deleteByBillId(String billId) {
-        int res = billMapper.deleteByBillId(billId);
+    public Result deleteByBillId(String userid, String billId) {
+        int res = billMapper.deleteByBillId(userid, billId);
         if(res > 0){
             return ResultUtil.success(null);
         }

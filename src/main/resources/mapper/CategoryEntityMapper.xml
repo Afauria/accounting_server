@@ -73,11 +73,13 @@
     update
     <include refid="TABLE"></include>
     set dr = 1
-    where category_id = #{categoryId,jdbcType=CHAR}
+    where category_id = #{categoryId,jdbcType=CHAR} and creator = #{creator} and dr = 0
   </delete>
 
 
-
+  <select id="isExist" parameterType="java.lang.String" resultType="java.lang.String">
+    select name from <include refid="TABLE" /> where name = #{name} and dr = 0 limit 1
+  </select>
 
 
 </mapper>

@@ -39,7 +39,7 @@ public class BillController {
 
     @PostMapping("/delete")
     public Object deleteByAccountId(@RequestHeader(value = "userid", required = true) String userId, @RequestBody BillQueryEntity billQueryEntity) {
-        return billService.deleteByBillId(billQueryEntity.getBillId());
+        return billService.deleteByBillId(userId, billQueryEntity.getBillId());
     }
 }
 

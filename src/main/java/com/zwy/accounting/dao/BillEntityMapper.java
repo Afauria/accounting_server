@@ -14,5 +14,5 @@ public interface BillEntityMapper {
 
     List<BillEntity> selectByCondition(BillQueryEntity billQueryEntity);
 
-    int deleteByBillId(String billId);
+    int deleteByBillId(@Param("creator") String creator,@Param("billId") String billId);
 }

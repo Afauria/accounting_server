@@ -3,28 +3,28 @@ package com.zwy.accounting.entity;
 import java.io.Serializable;
 
 public class UserEntity implements Serializable {
-    private Integer id;
+    private String userId;
 
-    private String phoneNum;
+    private String phonenum;
 
     private String password;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getPhoneNum() {
-        return phoneNum;
+    public String getPhonenum() {
+        return phonenum;
     }
 
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum == null ? null : phoneNum.trim();
+    public void setPhonenum(String phonenum) {
+        this.phonenum = phonenum == null ? null : phonenum.trim();
     }
 
     public String getPassword() {
@@ -41,8 +41,8 @@ public class UserEntity implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", phoneNum=").append(phoneNum);
+        sb.append(", id=").append(userId);
+        sb.append(", phoneNum=").append(phonenum);
         sb.append(", password=").append(password);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
